@@ -63,7 +63,7 @@ TEST(Level1_axpy, skips_axpy) {
 	}
 }
 
-TEST(Level1_axpy, hard_with_skips_axpy) {
+TEST(Level1_axpy, hard_skips_axpy) {
     long nx = 100000, ny = nx * 5;
     std::vector<double> x(nx), y(ny), z(ny);
     int incx = 5, incy = 2;
@@ -189,7 +189,6 @@ TEST(Level1_copy, skips_copy) {
 	long nx = 100000, ny = nx * 5;
     std::vector<double> x(nx), y(ny), z(ny);
     int incx = 5, incy = 2;
-    double alpha = static_cast<double>(std::rand()) / RAND_MAX;
 
     for (long i = 0; i < nx; i++) {
 		x[i] = static_cast<double>(std::rand()) / RAND_MAX;
@@ -227,7 +226,6 @@ TEST(Level1_swap, skips_swap) {
 	long nx = 100000, ny = nx * 5;
     std::vector<double> x(nx), y(ny), z(ny);
     int incx = 5, incy = 2;
-    double alpha = static_cast<double>(std::rand()) / RAND_MAX;
 
     for (long i = 0; i < nx; i++) {
 		x[i] = static_cast<double>(std::rand()) / RAND_MAX;
@@ -400,4 +398,143 @@ TEST(Level1_rotg, hard_rotg) {
 		ASSERT_NEAR(-s * orig_a + c * orig_b, 0.0, 1e-10); // allow for floating point tolerance
 	}
 }
+
+// test rot
+
+TEST(Level1_rot, basic_rot) {
+	long n = 3;
+	double x[3] = {1.0, 2.0, 3.0}, y[3] = {4.0, 5.0, 6.0};
+	int incx = 1, incy = 1;
+	double c = 1.0, s = 1.0;
+
+	ASSERT_EQ(rot(n, x, incx, y, incy, c, s), 1);
+
+	double r_x[3] = {5.0, 7.0, 9.0};
+	double r_y[3] = {3.0, 3.0, 3.0};
+	
+	for (long i = 0; i < n; i++) {
+    	ASSERT_DOUBLE_EQ(r_x[i], x[i]);
+		ASSERT_DOUBLE_EQ(r_y[i], y[i]);
+	}
+}
+
+TEST(Level1_rot, hard_rot) {
+	long n = 100000;
+	std::vector<double> x(n), y(n), r_x(n), r_y(n);
+	int incx = 1, incy = 1;
+	double c = static_cast<double>(std::rand()) / RAND_MAX, s = static_cast<double>(std::rand()) / RAND_MAX;
+
+	for (long i = 0; i < n; i++) {
+		x[i] = static_cast<double>(std::rand()) / RAND_MAX;
+		y[i] = static_cast<double>(std::rand()) / RAND_MAX;
+
+		r_x[i] = c * x[i] + s * y[i];
+		r_y[i] = c * y[i] - s * x[i];
+	}
+
+	ASSERT_EQ(rot(n, x.data(), incx, y.data(), incy, c, s), 1);
+	for (long i = 0; i < n; i++) {
+    	ASSERT_DOUBLE_EQ(r_x[i], x[i]);
+		ASSERT_DOUBLE_EQ(r_y[i], y[i]);
+	}
+}
+
+TEST(Level1_rot, skips_rot) {
+	long steps = 1000;
+	int incx = 5, incy = 2;
+	long n = steps * incx * incy;
+	std::vector<double> x(n), y(n), r_x(n), r_y(n);
+	double c = static_cast<double>(std::rand()) / RAND_MAX, s = static_cast<double>(std::rand()) / RAND_MAX;
+
+	for (long i = 0; i < n; i++) {
+		x[i] = static_cast<double>(std::rand()) / RAND_MAX;
+		y[i] = static_cast<double>(std::rand()) / RAND_MAX;
+
+		r_x[i] = x[i];
+		r_y[i] = y[i];
+	}
+
+	for (long i = 0; i < steps; i++) {
+		r_x[i * incx] = c * x[i * incx] + s * y[i * incy];
+		r_y[i * incy] = c * y[i * incy] - s * x[i * incx];
+	}
+
+	ASSERT_EQ(rot(steps, x.data(), incx, y.data(), incy, c, s), 1);
+	for (long i = 0; i < n; i++) {
+    	ASSERT_DOUBLE_EQ(r_x[i], x[i]);
+		ASSERT_DOUBLE_EQ(r_y[i], y[i]);
+	}
+}
+
+// test rotm
+
+TEST(Level1_rotm, basic_rotm) {
+    long n = 3;
+    double x[3] = {1.0, 2.0, 3.0};
+    double y[3] = {4.0, 5.0, 6.0};
+    int incx = 1, incy = 1;
+    double param[5] = {-1.0, 2.0, 3.0, 4.0, 5.0};
+
+    ASSERT_EQ(rotm(n, x, incx, y, incy, param), 1.0);
+
+    double r_x[3] = {18.0, 24.0, 30.0};
+    double r_y[3] = {23.0, 31.0, 39.0};
+
+    for (long i = 0; i < n; i++) {
+        ASSERT_DOUBLE_EQ(r_x[i], x[i]);
+        ASSERT_DOUBLE_EQ(r_y[i], y[i]);
+    }
+}
+
+TEST(Level1_rotm, no_op_rotm) {
+    long n = 4;
+    double x[4] = {1.0, -2.0, 3.5, -4.5};
+    double y[4] = {4.0, -1.0, 2.5,  0.5};
+    int incx = 1, incy = 1;
+    double param[5] = {-2.0, 0.0, 0.0, 0.0, 0.0};
+
+    double orig_x[4] = {1.0, -2.0, 3.5, -4.5};
+    double orig_y[4] = {4.0, -1.0, 2.5,  0.5};
+
+    ASSERT_EQ(rotm(n, x, incx, y, incy, param), 1.0);
+    for (long i = 0; i < n; i++) {
+        ASSERT_DOUBLE_EQ(orig_x[i], x[i]);
+        ASSERT_DOUBLE_EQ(orig_y[i], y[i]);
+    }
+}
+
+TEST(Level1_rotm, skips_rotm) {
+    long steps = 1000;
+    int incx = 5, incy = 2;
+    long n = steps * incx;
+    long m = steps * incy;
+    std::vector<double> x(n), y(m), r_x(n), r_y(m);
+    double param[5] = {-1.0, 1.5, -2.0, 0.5, -1.0};
+
+    for (long i = 0; i < n; i++) {
+        x[i] = static_cast<double>(std::rand()) / RAND_MAX;
+        r_x[i] = x[i];
+    }
+
+    for (long i = 0; i < m; i++) {
+        y[i] = static_cast<double>(std::rand()) / RAND_MAX;
+        r_y[i] = y[i];
+    }
+
+    for (long i = 0; i < steps; i++) {
+        long xi = i * incx;
+        long yi = i * incy;
+        r_x[xi] = param[1] * x[xi] + param[3] * y[yi];
+        r_y[yi] = param[2] * x[xi] + param[4] * y[yi];
+    }
+
+    ASSERT_EQ(rotm(steps, x.data(), incx, y.data(), incy, param), 1.0);
+    for (long i = 0; i < n; i++) {
+        ASSERT_DOUBLE_EQ(r_x[i], x[i]);
+    }
+    for (long i = 0; i < m; i++) {
+        ASSERT_DOUBLE_EQ(r_y[i], y[i]);
+    }
+}
+
 

@@ -91,4 +91,51 @@ namespace mblas {
 
 		return 1;
 	}
+
+	int rot(long n, double* x, int incx, double* y, int incy, double c, double s) {
+		for (long i = 0; i < n; i++) {
+			double temp_x = x[i * incx];
+			double temp_y = y[i * incy];
+
+			x[i * incx] = c * temp_x + s * temp_y;
+			y[i * incy] = c * temp_y - s * temp_x;
+		}
+
+		return 1;
+	}
+
+	int rotm(long n, double* x, int incx, double* y, int incy, double param[5]) {
+		double H[4] = {
+			param[1], param[3],
+			param[2], param[4]
+		};
+
+		int flag = static_cast<int>(param[0]);
+		if (flag == 0) {
+			H[0] = 1.0;
+			H[3] = 1.0;
+		} else if (flag == 1) {
+			H[1] = 1.0;
+			H[2] = -1.0;
+		} else if (flag == -2)  {
+			return 1;
+		} else if (flag != -1) {
+			return 0;
+		}
+
+		for (long i = 0; i < n; i++) {
+			double temp_x = x[i * incx];
+			double temp_y = y[i * incy];
+
+			x[i * incx] = H[0] * temp_x + H[1] * temp_y;
+			y[i * incy] = H[2] * temp_x + H[3] * temp_y;
+		}
+
+		return 1;
+	}
+	
+	int rotmg(double* d1, double* d2, double* x1, const double y1, double param[5]) {
+		// TODO: rotmg
+		return -1;
+	}
 }
