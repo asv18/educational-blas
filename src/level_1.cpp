@@ -1,4 +1,5 @@
-#include "blas.hpp"
+#include "blas_core.hpp"
+#include "blas_other.hpp"
 
 namespace mblas {
 	int axpy(long n, double alpha, const double* x, int incx, double* y, int incy) {
@@ -12,24 +13,6 @@ namespace mblas {
 	int scal(long n, double alpha, double* y, int incy) {
 		for (long i = 0; i < n; i++) {
 			y[i * incy] = alpha * y[i * incy];
-		}
-
-		return 1;
-	}
-	
-	int copy(long n, const double* x, int incx, double* y, int incy) {
-		for (long i = 0; i < n; i++) {
-			y[i * incy] = x[i * incx];
-		}
-
-		return 1;
-	}
-
-	int swap(long n, double* x, int incx, double* y, int incy) {
-		for (long i = 0; i < n; i++) {
-			double t = y[i * incy];
-			y[i * incy] = x[i * incx];
-			x[i * incx]  = t;
 		}
 
 		return 1;
@@ -51,6 +34,27 @@ namespace mblas {
 		}
 
 		return std::sqrt(z);
+	}
+
+
+	// ================================ UNECESSARY ================================
+	
+	int copy(long n, const double* x, int incx, double* y, int incy) {
+		for (long i = 0; i < n; i++) {
+			y[i * incy] = x[i * incx];
+		}
+
+		return 1;
+	}
+
+	int swap(long n, double* x, int incx, double* y, int incy) {
+		for (long i = 0; i < n; i++) {
+			double t = y[i * incy];
+			y[i * incy] = x[i * incx];
+			x[i * incx]  = t;
+		}
+
+		return 1;
 	}
 
 	double asum(long n, double* y, int incy) {
@@ -135,7 +139,8 @@ namespace mblas {
 	}
 	
 	int rotmg(double* d1, double* d2, double* x1, const double y1, double param[5]) {
-		// TODO: rotmg
+		// TODO: no need to implement rotmg for educational implementation,
+		// not sure why i implemented a lot of this stuff in the first place
 		return -1;
 	}
 }

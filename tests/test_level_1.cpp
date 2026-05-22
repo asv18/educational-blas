@@ -5,7 +5,8 @@
 #include <cmath>
 #include <cfloat>
 
-#include "blas.hpp"
+#include "blas_core.hpp"
+#include "blas_other.hpp"
 
 using namespace testing;
 using namespace mblas;
