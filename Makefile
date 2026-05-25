@@ -1,71 +1,126 @@
-# Compiler & flags
-CXX      := g++
-CXXFLAGS := -std=c++17 -Wall -Wextra -O2
-INCLUDES := -Iinclude
+# =========================================================
+# Compiler
+# =========================================================
 
+CXX := g++
+
+CXXFLAGS := -std=c++17 -Wall -Wextra -O2
+CPPFLAGS := -Iinclude
+
+AR := ar
+ARFLAGS := rcs
+
+# =========================================================
 # Directories
+# =========================================================
+
 SRC_DIR   := src
 TEST_DIR  := tests
 BENCH_DIR := bench
 BUILD_DIR := build
 
-# Sources
-SRC_FILES   := $(wildcard $(SRC_DIR)/level_*.cpp)
-TEST_FILES  := $(wildcard $(TEST_DIR)/test_*.cpp)
-BENCH_FILES := $(wildcard $(BENCH_DIR)/benchmark_*.cpp)
+# =========================================================
+# Recursive source discovery
+# =========================================================
+
+SRC_FILES   := $(shell find $(SRC_DIR)   -name '*.cpp')
+TEST_FILES  := $(shell find $(TEST_DIR)  -name '*.cpp')
+BENCH_FILES := $(shell find $(BENCH_DIR) -name '*.cpp')
+
+# =========================================================
+# Object files
+# =========================================================
+
+SRC_OBJS := $(patsubst $(SRC_DIR)/%.cpp,$(BUILD_DIR)/src/%.o,$(SRC_FILES))
+
+TEST_OBJS := $(patsubst $(TEST_DIR)/%.cpp,$(BUILD_DIR)/test/%.o,$(TEST_FILES))
+
+BENCH_OBJS := $(patsubst $(BENCH_DIR)/%.cpp,$(BUILD_DIR)/bench/%.o,$(BENCH_FILES))
+
+# =========================================================
+# External libraries
+# =========================================================
 
 GTEST_CFLAGS := $(shell pkg-config --cflags gtest_main)
-GTEST_LIBS   := $(shell pkg-config --libs   gtest_main)
+GTEST_LIBS   := $(shell pkg-config --libs gtest_main)
 
-# Objects
-SRC_OBJS  := $(patsubst $(SRC_DIR)/%.cpp,   $(BUILD_DIR)/src/%.o,   $(SRC_FILES))
-TEST_OBJS := $(patsubst $(TEST_DIR)/%.cpp,  $(BUILD_DIR)/test/%.o,  $(TEST_FILES))
-BENCH_OBJS:= $(patsubst $(BENCH_DIR)/%.cpp, $(BUILD_DIR)/bench/%.o, $(BENCH_FILES))
+GBENCH_CFLAGS := $(shell pkg-config --cflags benchmark_main)
+GBENCH_LIBS   := $(shell pkg-config --libs benchmark_main)
 
+# =========================================================
 # Targets
-LIB        := $(BUILD_DIR)/libblas.a
-TEST_BIN   := $(BUILD_DIR)/run_tests
-BENCH_BIN  := $(BUILD_DIR)/run_benchmarks
+# =========================================================
 
-# Default
+LIB       := $(BUILD_DIR)/libblas.a
+TEST_BIN  := $(BUILD_DIR)/run_tests
+BENCH_BIN := $(BUILD_DIR)/run_benchmarks
+
+# =========================================================
+# Default target
+# =========================================================
+
 .PHONY: all
-all: clean $(LIB)
+all: $(LIB)
 
-# Static library (core)
-$(LIB): $(SRC_OBJS) | $(BUILD_DIR)
-	ar rcs $@ $^
+# =========================================================
+# Static library
+# =========================================================
 
+$(LIB): $(SRC_OBJS)
+	@mkdir -p $(dir $@)
+	$(AR) $(ARFLAGS) $@ $^
+
+# =========================================================
 # Tests
+# =========================================================
+
 .PHONY: test
-test: clean $(TEST_BIN)
+test: $(TEST_BIN)
 	./$(TEST_BIN)
 
-$(TEST_BIN): $(TEST_OBJS) $(LIB) | $(BUILD_DIR)/test
+$(TEST_BIN): $(TEST_OBJS) $(LIB)
+	@mkdir -p $(dir $@)
 	$(CXX) $(CXXFLAGS) $^ $(GTEST_LIBS) -o $@
 
+# =========================================================
 # Benchmarks
+# =========================================================
+
 .PHONY: bench
-bench: clean $(BENCH_BIN)
+bench: $(BENCH_BIN)
 	./$(BENCH_BIN)
 
-$(BENCH_BIN): $(BENCH_OBJS) $(LIB) | $(BUILD_DIR)/bench
-	$(CXX) $(CXXFLAGS) $^ -o $@
+$(BENCH_BIN): $(BENCH_OBJS) $(LIB)
+	@mkdir -p $(dir $@)
+	$(CXX) $(CXXFLAGS) $^ $(GBENCH_LIBS) -o $@
 
+# =========================================================
 # Compile rules
-$(BUILD_DIR)/src/%.o: $(SRC_DIR)/%.cpp | $(BUILD_DIR)/src
-	$(CXX) $(CXXFLAGS) $(INCLUDES) -c $< -o $@
+# =========================================================
 
-$(BUILD_DIR)/test/%.o: $(TEST_DIR)/%.cpp | $(BUILD_DIR)/test
-	$(CXX) $(CXXFLAGS) $(INCLUDES) $(GTEST_CFLAGS) -c $< -o $@
+$(BUILD_DIR)/src/%.o: $(SRC_DIR)/%.cpp
+	@mkdir -p $(dir $@)
+	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c $< -o $@
 
-$(BUILD_DIR)/bench/%.o: $(BENCH_DIR)/%.cpp | $(BUILD_DIR)/bench
-	$(CXX) $(CXXFLAGS) $(INCLUDES) -c $< -o $@
+$(BUILD_DIR)/test/%.o: $(TEST_DIR)/%.cpp
+	@mkdir -p $(dir $@)
+	$(CXX) $(CPPFLAGS) $(CXXFLAGS) $(GTEST_CFLAGS) -c $< -o $@
 
-# Directory creation
-$(BUILD_DIR) $(BUILD_DIR)/src $(BUILD_DIR)/test $(BUILD_DIR)/bench:
-	mkdir -p $@
+$(BUILD_DIR)/bench/%.o: $(BENCH_DIR)/%.cpp
+	@mkdir -p $(dir $@)
+	$(CXX) $(CPPFLAGS) $(CXXFLAGS) $(GBENCH_CFLAGS) -c $< -o $@
 
+# =========================================================
 # Cleanup
+# =========================================================
+
 .PHONY: clean
 clean:
 	rm -rf $(BUILD_DIR)
+
+# =========================================================
+# Convenience
+# =========================================================
+
+.PHONY: rebuild
+rebuild: clean all

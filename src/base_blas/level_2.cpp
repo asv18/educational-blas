@@ -17,9 +17,9 @@ namespace mblas {
 			return 0;
 		}
 
-		for (int row = 0; row < m; row++) {
+		for (int row = 0; row < rows; row++) {
 			y[row * incy] *= beta;
-			for (int col = 0; col < n; col++) {
+			for (int col = 0; col < cols; col++) {
 				int idx = row * row_stride + col * col_stride;
 
 				y[row * incy] += alpha * A[idx] * x[col * incx];

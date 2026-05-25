@@ -12,7 +12,7 @@ using namespace mblas;
 
 // gemv
 
-TEST(Level2_gemv, basic_gemv1) {
+TEST(Level2_gemv_baseline, basic_gemv1_baseline) {
 	char trans = 'N';
 	int m = 2, n = 2;
 	double A[4] = {
@@ -31,7 +31,7 @@ TEST(Level2_gemv, basic_gemv1) {
 	ASSERT_DOUBLE_EQ(x[1], y[1]);
 }
 
-TEST(Level2_gemv, basic_gemv2) {
+TEST(Level2_gemv_baseline, basic_gemv2_baseline) {
 	char trans = 'T';
 	int m = 2, n = 2;
 	double A[4] = {
@@ -50,7 +50,7 @@ TEST(Level2_gemv, basic_gemv2) {
 	ASSERT_DOUBLE_EQ(x[1], y[1]);
 }
 
-TEST(Level2_gemv, basic_gemv3) {
+TEST(Level2_gemv_baseline, basic_gemv3_baseline) {
 	char trans = 'T';
 	int m = 2, n = 2;
 	double A[4] = {
@@ -69,7 +69,7 @@ TEST(Level2_gemv, basic_gemv3) {
 	ASSERT_NEAR(x[0], y[1], 1e-10);
 }
 
-TEST(Level2_gemv, hard_gemv) {
+TEST(Level2_gemv_baseline, hard_gemv_baseline) {
     char trans = (static_cast<double>(std::rand()) / RAND_MAX) > 0.5 ? 'T' : 'N';
 
     int m = 100, n = 200;
@@ -119,7 +119,7 @@ TEST(Level2_gemv, hard_gemv) {
 	}
 }
 
-TEST(Level2_gemv, skips_gemv) {
+TEST(Level2_gemv_baseline, skips_gemv_baseline) {
     char trans = (static_cast<double>(std::rand()) / RAND_MAX) > 0.5 ? 'T' : 'N';
 
     int incx = 10, incy = 20;
@@ -179,7 +179,7 @@ TEST(Level2_gemv, skips_gemv) {
 
 // ger
 
-TEST(Level2_ger, basic_ger1) {
+TEST(Level2_ger_baseline, basic_ger1_baseline) {
 	int m = 2, n = 2, lda = 2, incx = 1, incy = 1;
 	double alpha = 1.0;
 	double x[2] = {1.0, 0.0}, y[2] = {0.0, 1.0};
@@ -197,7 +197,7 @@ TEST(Level2_ger, basic_ger1) {
 	ASSERT_THAT(A, Pointwise(DoubleNear(1e-10), rA));
 }
 
-TEST(Level2_ger, basic_ger2) {
+TEST(Level2_ger_baseline, basic_ger2_baseline) {
 	int m = 2, n = 2, lda = 2, incx = 1, incy = 1;
 	double alpha = static_cast<double>(std::rand()) / RAND_MAX;
 	double x[2] = {
@@ -218,7 +218,7 @@ TEST(Level2_ger, basic_ger2) {
 	ASSERT_THAT(A, Pointwise(DoubleNear(1e-10), rA));
 }
 
-TEST(Level2_ger, hard_ger) {
+TEST(Level2_ger_baseline, hard_ger_baseline) {
 	int m = 100, n = 200;
 	int lda = n;
 	int incx = 1, incy = 1;
@@ -243,7 +243,7 @@ TEST(Level2_ger, hard_ger) {
 	ASSERT_THAT(A, Pointwise(DoubleNear(1e-10), rA));
 }
 
-TEST(Level2_ger, skips_ger) {
+TEST(Level2_ger_baseline, skips_ger_baseline) {
 	int incx = 10, incy = 20;
 	int m_steps = 200, n_steps = 100;
 	int m = m_steps * incx, n = n_steps * incy;
@@ -281,132 +281,4 @@ TEST(Level2_ger, skips_ger) {
 	ASSERT_EQ(ger(m_steps, n_steps, alpha, x.data(), incx, y.data(), incy, A.data(), lda), 1);
 	ASSERT_THAT(A, Pointwise(DoubleNear(1e-10), rA));
 }
-
-// gemm
-
-TEST(Level2_gemm, basic_gemm1) {
-	int transa = 'N', transb = 'N';
-	int m = 2, n = 2, k = 2;
-	int lda = 2, ldb = 2, ldc = 2;
-	double alpha = 1.0, beta = 1.0;
-	double const A[4] = {
-		0.0, 1.0,
-		1.0, 0.0
-	};
-	double const B[4] = {
-		0.0, 1.0,
-		1.0, 0.0
-	};
-	double C[4] = {
-		0.0, 0.0,
-		0.0, 0.0
-	};
-	double rC[4] = {
-		1.0, 0.0,
-		0.0, 1.0
-	};
-
-	ASSERT_EQ(gemm(transa, transb, m, n, k, alpha, A, lda, B, ldb, beta, C, ldc), 1);
-	ASSERT_THAT(C, Pointwise(DoubleNear(1e-10), rC));
-}
-
-TEST(Level2_gemm, basic_gemm2) {
-	int transa = 'T', transb = 'T';
-	int m = 2, n = 2, k = 2;
-	int lda = 2, ldb = 2, ldc = 2;
-	double alpha = 1.0, beta = 1.0;
-	double const A[4] = {
-		0.0, 1.0,
-		1.0, 0.0
-	};
-	double const B[4] = {
-		0.0, 1.0,
-		1.0, 0.0
-	};
-	double C[4] = {
-		0.0, 0.0,
-		0.0, 0.0
-	};
-	double rC[4] = {
-		1.0, 0.0,
-		0.0, 1.0
-	};
-
-	ASSERT_EQ(gemm(transa, transb, m, n, k, alpha, A, lda, B, ldb, beta, C, ldc), 1);
-	ASSERT_THAT(C, Pointwise(DoubleNear(1e-10), rC));
-}
-
-TEST(Level2_gemm, basic_gemm3) {
-	int transa = 'N', transb = 'N';
-	int m = 2, n = 2, k = 2;
-	int lda = 2, ldb = 2, ldc = 2;
-	double alpha = 1.0, beta = 1.0;
-	double const A[4] = {
-		1.0, 2.0,
-		3.0, 4.0
-	};
-	double const B[4] = {
-		5.0, 6.0,
-		7.0, 8.0
-	};
-	double C[4] = {
-		1.0, 0.0,
-		0.0, 1.0
-	};
-	double rC[4] = {
-		20.0, 22.0,
-		43.0, 51.0
-	};
-
-	ASSERT_EQ(gemm(transa, transb, m, n, k, alpha, A, lda, B, ldb, beta, C, ldc), 1);
-	ASSERT_THAT(C, Pointwise(DoubleNear(1e-10), rC));
-}
-
-TEST(Level2_gemm, hard_gemm) {
-	int transa = 'N', transb = 'N';
-	int m = 10, n = 20, k = 30;
-	int lda = n, ldb = k, ldc = k;
-	double alpha = static_cast<double>(std::rand()) / RAND_MAX, beta = static_cast<double>(std::rand()) / RAND_MAX;
-	std::vector<double> A(m * n), B(n * k), C(m * k), rC(m * k);
-
-	for (int row = 0; row < m; row++) {
-		for (int col = 0; col < n; col++) {
-			int idxA = row * lda + col;
-			A[idxA] = static_cast<double>(std::rand()) / RAND_MAX;
-		}
-	}
-
-	for (int row = 0; row < n; row++) {
-		for (int col = 0; col < k; col++) {
-			int idxB = row * ldb + col;
-			B[idxB] = static_cast<double>(std::rand()) / RAND_MAX;
-		}
-	}
-
-	for (int row = 0; row < m; row++) {
-		for (int col = 0; col < k; col++) {
-			int idxC = row * ldc + col;
-			C[idxC] = 0;
-		}
-	}
-
-	for (int i = 0; i < m ; i++) {
-		for (int l = 0; l < k; l++) {
-			int idxC = i * ldc + l;
-			rC[idxC] *= beta;
-
-			for (int j = 0; j < n; j++) {
-				int idxA = i * lda + j;
-				int idxB = j * ldb + l;
-				
-				rC[idxC] += alpha * A[idxA] * B[idxB];
-			}
-
-		}
-	}
-
-	ASSERT_EQ(gemm(transa, transb, m, n, k, alpha, A.data(), lda, B.data(), ldb, beta, C.data(), ldc), 1);
-	ASSERT_THAT(C, Pointwise(DoubleNear(1e-10), rC));
-}
-
 
