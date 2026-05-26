@@ -2,10 +2,16 @@
 # Compiler
 # =========================================================
 
-CXX := g++
+CXX := /opt/homebrew/opt/llvm/bin/clang++
 
-CXXFLAGS := -std=c++17 -Wall -Wextra -O2
-CPPFLAGS := -Iinclude
+CXXFLAGS := -std=c++17 -Wall -Wextra -O2 -fopenmp
+CXXFLAGS += -isysroot $(shell xcrun --show-sdk-path)
+
+CPPFLAGS := -Iinclude \
+            -I$(shell brew --prefix libomp)/include
+
+LDFLAGS := -L$(shell brew --prefix libomp)/lib
+LDLIBS := -lomp
 
 AR := ar
 ARFLAGS := rcs
@@ -80,7 +86,7 @@ test: $(TEST_BIN)
 
 $(TEST_BIN): $(TEST_OBJS) $(LIB)
 	@mkdir -p $(dir $@)
-	$(CXX) $(CXXFLAGS) $^ $(GTEST_LIBS) -o $@
+	$(CXX) $(CXXFLAGS) $^ $(LDFLAGS) $(LDLIBS) $(GTEST_LIBS) -o $@
 
 # =========================================================
 # Benchmarks
@@ -92,7 +98,7 @@ bench: $(BENCH_BIN)
 
 $(BENCH_BIN): $(BENCH_OBJS) $(LIB)
 	@mkdir -p $(dir $@)
-	$(CXX) $(CXXFLAGS) $^ $(GBENCH_LIBS) -o $@
+	$(CXX) $(CXXFLAGS) $^ $(LDFLAGS) $(LDLIBS) $(GBENCH_LIBS) -o $@
 
 # =========================================================
 # Compile rules

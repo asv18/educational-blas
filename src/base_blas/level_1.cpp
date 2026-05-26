@@ -4,7 +4,7 @@
 namespace mblas {
 	int axpy(long n, double alpha, const double* x, int incx, double* y, int incy) {
 		for (long i = 0; i < n; i++) {
-			y[i * incy] = y[i * incy] + alpha * x[i * incx];
+			y[i * incy] += alpha * x[i * incx];
 		}
 
 		return 1;

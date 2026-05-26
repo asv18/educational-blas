@@ -93,37 +93,37 @@ TEST(Level2_gemm_baseline, basic_gemm3_baseline) {
 TEST(Level2_gemm_baseline, hard_gemm_baseline) {
 	int transa = 'N', transb = 'N';
 	int m = 10, n = 20, k = 30;
-	int lda = n, ldb = k, ldc = k;
+	int lda = n, ldb = k, ldc = n;
 	double alpha = static_cast<double>(std::rand()) / RAND_MAX, beta = static_cast<double>(std::rand()) / RAND_MAX;
-	std::vector<double> A(m * n), B(n * k), C(m * k), rC(m * k);
+	std::vector<double> A(m * k), B(k * n), C(m * n), rC(m * n);
 
 	for (int row = 0; row < m; row++) {
-		for (int col = 0; col < n; col++) {
+		for (int col = 0; col < k; col++) {
 			int idxA = row * lda + col;
 			A[idxA] = static_cast<double>(std::rand()) / RAND_MAX;
 		}
 	}
 
-	for (int row = 0; row < n; row++) {
-		for (int col = 0; col < k; col++) {
+	for (int row = 0; row < k; row++) {
+		for (int col = 0; col < n; col++) {
 			int idxB = row * ldb + col;
 			B[idxB] = static_cast<double>(std::rand()) / RAND_MAX;
 		}
 	}
 
 	for (int row = 0; row < m; row++) {
-		for (int col = 0; col < k; col++) {
+		for (int col = 0; col < n; col++) {
 			int idxC = row * ldc + col;
 			C[idxC] = 0;
 		}
 	}
 
 	for (int i = 0; i < m ; i++) {
-		for (int l = 0; l < k; l++) {
+		for (int l = 0; l < n; l++) {
 			int idxC = i * ldc + l;
 			rC[idxC] *= beta;
 
-			for (int j = 0; j < n; j++) {
+			for (int j = 0; j < k; j++) {
 				int idxA = i * lda + j;
 				int idxB = j * ldb + l;
 				

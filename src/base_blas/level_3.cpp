@@ -8,19 +8,21 @@ namespace mblas {
 		double const* B, int ldb,
 		double beta, double* C, int ldc
 	) {
-		// (m x n) * (n x k) = (m x k)
+		// (m x k) * (k x n) = (m x n)
 		for (int i = 0; i < m ; i++) {
-			for (int l = 0; l < k; l++) {
+			for (int l = 0; l < n; l++) {
 				int idxC = i * ldc + l;
-				C[idxC] *= beta;
 
-				for (int j = 0; j < n; j++) {
+				double sum = 0.0;
+				for (int j = 0; j < k; j++) {
 					int idxA = i * lda + j;
 					int idxB = j * ldb + l;
 					
-					C[idxC] += alpha * A[idxA] * B[idxB];
+					sum += alpha * A[idxA] * B[idxB];
 				}
 
+				C[idxC] *= beta;
+				C[idxC] += sum;
 			}
 		}
 

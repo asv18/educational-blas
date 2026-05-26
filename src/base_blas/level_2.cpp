@@ -18,12 +18,15 @@ namespace mblas {
 		}
 
 		for (int row = 0; row < rows; row++) {
-			y[row * incy] *= beta;
+			double sum = 0.0;
 			for (int col = 0; col < cols; col++) {
 				int idx = row * row_stride + col * col_stride;
 
-				y[row * incy] += alpha * A[idx] * x[col * incx];
+				sum += alpha * A[idx] * x[col * incx];
 			}
+
+			y[row * incy] *= beta;
+			y[row * incy] += sum;
 		}
 
 		return 1;

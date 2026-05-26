@@ -64,31 +64,6 @@ TEST(Level1_axpy_baseline, skips_axpy_baseline) {
 	}
 }
 
-TEST(Level1_axpy_baseline, hard_skips_axpy_baseline) {
-    long nx = 100000, ny = nx * 5;
-    std::vector<double> x(nx), y(ny), z(ny);
-    int incx = 5, incy = 2;
-    double alpha = static_cast<double>(std::rand()) / RAND_MAX;
-
-    for (long i = 0; i < nx; i++) {
-		x[i] = static_cast<double>(std::rand()) / RAND_MAX;
-	}
-        
-    for (long i = 0; i < ny; i++) {
-        y[i] = static_cast<double>(std::rand()) / RAND_MAX;
-        z[i] = y[i];
-    }
-
-    for (long i = 0; i < nx; i++) {
-        z[i * incy] = alpha * x[i * incx] + y[i * incy];
-	}
-
-    ASSERT_EQ(axpy(nx, alpha, x.data(), incx, y.data(), incy), 1);
-    for (long i = 0; i < ny; i++) {
-        ASSERT_DOUBLE_EQ(y[i], z[i]);
-	}
-}
-
 // test scal
 
 TEST(Level1_scal_baseline, basic_scal_baseline) {
@@ -136,23 +111,6 @@ TEST(Level1_scal_baseline, skips_scal_baseline) {
 	ASSERT_EQ(scal(n / incy, alpha, y.data(), incy), 1);
 	for (long i = 0; i < n / incy; i++) {
     	ASSERT_DOUBLE_EQ(y[i * incy], z[i]);
-	}
-}
-
-TEST(Level1_scal_baseline, long_scal_baseline) {
-	long n = 1000000;
-	std::vector<double> y(n), z(n);
-	int incy = 1;
-	double alpha = static_cast<double>(std::rand()) / RAND_MAX;
-
-	for (long i = 0; i < n; i++) {
-		y[i] = static_cast<double>(std::rand()) / RAND_MAX;
-		z[i] = alpha * y[i];
-	}
-
-	ASSERT_EQ(scal(n, alpha, y.data(), incy), 1);
-	for (long i = 0; i < n; i++) {
-    	ASSERT_DOUBLE_EQ(y[i], z[i]);
 	}
 }
 

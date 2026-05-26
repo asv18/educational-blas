@@ -2,6 +2,7 @@
 
 #include <cmath>
 #include <cfloat>
+#include <omp.h>
 
 namespace pblas {
 	/**
