@@ -31,7 +31,11 @@ static void BENCHMARK_axpy_baseline(benchmark::State& state) {
 }
 BENCHMARK(BENCHMARK_axpy_baseline)
 	->Args({16384})
+	->Args({32768})
+	->Args({65536})
+	->Args({131072})
 	->Args({262144})
+	->Args({524288})
 	->Args({1048576});
 
 static void BENCHMARK_scal_baseline(benchmark::State& state) {
@@ -60,7 +64,11 @@ static void BENCHMARK_scal_baseline(benchmark::State& state) {
 }
 BENCHMARK(BENCHMARK_scal_baseline)
 	->Args({16384})
+	->Args({32768})
+	->Args({65536})
+	->Args({131072})
 	->Args({262144})
+	->Args({524288})
 	->Args({1048576});
 
 static void BENCHMARK_dot_baseline(benchmark::State& state) {
@@ -90,7 +98,11 @@ static void BENCHMARK_dot_baseline(benchmark::State& state) {
 }
 BENCHMARK(BENCHMARK_dot_baseline)
 	->Args({16384})
+	->Args({32768})
+	->Args({65536})
+	->Args({131072})
 	->Args({262144})
+	->Args({524288})
 	->Args({1048576});
 
 static void BENCHMARK_nrm2_baseline(benchmark::State& state) {
@@ -119,7 +131,11 @@ static void BENCHMARK_nrm2_baseline(benchmark::State& state) {
 }
 BENCHMARK(BENCHMARK_nrm2_baseline)
 	->Args({16384})
+	->Args({32768})
+	->Args({65536})
+	->Args({131072})
 	->Args({262144})
+	->Args({524288})
 	->Args({1048576});
 
 static void BENCHMARK_gemv_baseline(benchmark::State& state) {
@@ -166,6 +182,8 @@ static void BENCHMARK_gemv_baseline(benchmark::State& state) {
     }
 }
 BENCHMARK(BENCHMARK_gemv_baseline)
+	->Args({64})
+	->Args({128})
 	->Args({256})
 	->Args({512})
 	->Args({1024});
@@ -206,6 +224,8 @@ static void BENCHMARK_ger_baseline(benchmark::State& state) {
     }
 }
 BENCHMARK(BENCHMARK_ger_baseline)
+	->Args({64})
+	->Args({128})
 	->Args({256})
 	->Args({512})
 	->Args({1024});
@@ -247,6 +267,8 @@ static void BENCHMARK_gemm_baseline(benchmark::State& state) {
     }
 }
 BENCHMARK(BENCHMARK_gemm_baseline)
+	->Args({64})
+	->Args({128})
 	->Args({256})
 	->Args({512})
 	->Args({1024});

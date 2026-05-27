@@ -1,3 +1,20 @@
+# AI Citation: Anthropic's Claude AI (Claude Sonnet 4.6, free tier, OTD 5/20/2026) \
+ generated this makefile and made tweaks.
+# Original Prompt: Generate a C++ Makefile with three targets: \
+	1. all: compile nested C++ files in src/. \
+	2. bench: compile and run C++ files in bench/ using Google's benchmarking suite \
+	3. test: compile and run C++ files in tests/ using Google's testing suite
+# Adjustment Prompt(s): \
+	1. I brew-installed gtest and benchmark, so adjust my makefile to recognize that \
+	2. I brew-installed libomp, so adjust my targets to accept libomp \
+	3. I'm getting this error when running make bench: <insert error here>\n\n How do I fix this?
+# Notes: \
+	1. I don't generally like designing and writing Makefiles, and since the scope of this project wasn't \
+	Makefile design, I saw it apt to generate one (with guidance).  \
+	2. The prompt I put in "Original Prompt" is paraphrasing; I don't remember the exact prompt, \
+	and I can't recover the original chat where I sent it unfortunately. \
+	3. I don't usually cite AI, so I decided to give it a shot here. Any further suggestions are greatly appreciated!
+
 # =========================================================
 # Compiler
 # =========================================================
@@ -95,6 +112,10 @@ $(TEST_BIN): $(TEST_OBJS) $(LIB)
 .PHONY: bench
 bench: $(BENCH_BIN)
 	./$(BENCH_BIN)
+
+.PHONY: bench_to_csv
+bench_to_csv: $(BENCH_BIN)
+	./$(BENCH_BIN) --benchmark_out_format=csv --benchmark_out=bench_results.csv
 
 $(BENCH_BIN): $(BENCH_OBJS) $(LIB)
 	@mkdir -p $(dir $@)

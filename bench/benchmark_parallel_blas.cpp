@@ -31,12 +31,13 @@ static void BENCHMARK_axpy_parallel(benchmark::State& state) {
     }
 }
 BENCHMARK(BENCHMARK_axpy_parallel)
-	->Args({16384, 2})
-	->Args({16384, 4})
-	->Args({262144, 4})
-	->Args({262144, 8})
-	->Args({1048576, 8})
-	->Args({1048576, 16});
+	->Args({16384, 2})->Args({16384, 4})->Args({16384, 8})->Args({16384, 16})
+	->Args({32768, 2})->Args({32768, 4})->Args({32768, 8})->Args({32768, 16})
+	->Args({65536, 2})->Args({65536, 4})->Args({65536, 8})->Args({65536, 16})
+	->Args({131072, 2})->Args({131072, 4})->Args({131072, 8})->Args({131072, 16})
+	->Args({262144, 2})->Args({262144, 4})->Args({262144, 8})->Args({262144, 16})
+	->Args({524288, 2})->Args({524288, 4})->Args({524288, 8})->Args({524288, 16})
+	->Args({1048576, 2})->Args({1048576, 4})->Args({1048576, 8})->Args({1048576, 16});
 
 static void BENCHMARK_scal_parallel(benchmark::State& state) {
 	long n = state.range(0);
@@ -64,12 +65,13 @@ static void BENCHMARK_scal_parallel(benchmark::State& state) {
     }
 }
 BENCHMARK(BENCHMARK_scal_parallel)
-	->Args({16384, 2})
-	->Args({16384, 4})
-	->Args({262144, 4})
-	->Args({262144, 8})
-	->Args({1048576, 8})
-	->Args({1048576, 16});
+	->Args({16384, 2})->Args({16384, 4})->Args({16384, 8})->Args({16384, 16})
+	->Args({32768, 2})->Args({32768, 4})->Args({32768, 8})->Args({32768, 16})
+	->Args({65536, 2})->Args({65536, 4})->Args({65536, 8})->Args({65536, 16})
+	->Args({131072, 2})->Args({131072, 4})->Args({131072, 8})->Args({131072, 16})
+	->Args({262144, 2})->Args({262144, 4})->Args({262144, 8})->Args({262144, 16})
+	->Args({524288, 2})->Args({524288, 4})->Args({524288, 8})->Args({524288, 16})
+	->Args({1048576, 2})->Args({1048576, 4})->Args({1048576, 8})->Args({1048576, 16});
 
 static void BENCHMARK_dot_parallel(benchmark::State& state) {
 	long n = state.range(0);
@@ -98,12 +100,13 @@ static void BENCHMARK_dot_parallel(benchmark::State& state) {
     }
 }
 BENCHMARK(BENCHMARK_dot_parallel)
-	->Args({16384, 2})
-	->Args({16384, 4})
-	->Args({262144, 4})
-	->Args({262144, 8})
-	->Args({1048576, 8})
-	->Args({1048576, 16});
+	->Args({16384, 2})->Args({16384, 4})->Args({16384, 8})->Args({16384, 16})
+	->Args({32768, 2})->Args({32768, 4})->Args({32768, 8})->Args({32768, 16})
+	->Args({65536, 2})->Args({65536, 4})->Args({65536, 8})->Args({65536, 16})
+	->Args({131072, 2})->Args({131072, 4})->Args({131072, 8})->Args({131072, 16})
+	->Args({262144, 2})->Args({262144, 4})->Args({262144, 8})->Args({262144, 16})
+	->Args({524288, 2})->Args({524288, 4})->Args({524288, 8})->Args({524288, 16})
+	->Args({1048576, 2})->Args({1048576, 4})->Args({1048576, 8})->Args({1048576, 16});
 
 static void BENCHMARK_nrm2_parallel(benchmark::State& state) {
 	long n = state.range(0);
@@ -131,12 +134,13 @@ static void BENCHMARK_nrm2_parallel(benchmark::State& state) {
     }
 }
 BENCHMARK(BENCHMARK_nrm2_parallel)
-	->Args({16384, 2})
-	->Args({16384, 4})
-	->Args({262144, 4})
-	->Args({262144, 8})
-	->Args({1048576, 8})
-	->Args({1048576, 16});
+	->Args({16384, 2})->Args({16384, 4})->Args({16384, 8})->Args({16384, 16})
+	->Args({32768, 2})->Args({32768, 4})->Args({32768, 8})->Args({32768, 16})
+	->Args({65536, 2})->Args({65536, 4})->Args({65536, 8})->Args({65536, 16})
+	->Args({131072, 2})->Args({131072, 4})->Args({131072, 8})->Args({131072, 16})
+	->Args({262144, 2})->Args({262144, 4})->Args({262144, 8})->Args({262144, 16})
+	->Args({524288, 2})->Args({524288, 4})->Args({524288, 8})->Args({524288, 16})
+	->Args({1048576, 2})->Args({1048576, 4})->Args({1048576, 8})->Args({1048576, 16});
 
 static void BENCHMARK_gemv_parallel(benchmark::State& state) {
 	char trans = 'N';
@@ -183,12 +187,11 @@ static void BENCHMARK_gemv_parallel(benchmark::State& state) {
     }
 }
 BENCHMARK(BENCHMARK_gemv_parallel)
-	->Args({256, 2})
-	->Args({256, 4})
-	->Args({512, 4})
-	->Args({512, 8})
-	->Args({1024, 8})
-	->Args({1024, 16});
+	->Args({64, 2})->Args({64, 4})->Args({64, 8})->Args({64, 16})
+	->Args({128, 2})->Args({128, 4})->Args({128, 8})->Args({128, 16})
+	->Args({256, 2})->Args({256, 4})->Args({256, 8})->Args({256, 16})
+	->Args({512, 2})->Args({512, 4})->Args({512, 8})->Args({512, 16})
+	->Args({1024, 2})->Args({1024, 4})->Args({1024, 8})->Args({1024, 16});
 
 static void BENCHMARK_gemm_parallel(benchmark::State& state) {
 	int transa = 'N', transb = 'N';
@@ -228,9 +231,8 @@ static void BENCHMARK_gemm_parallel(benchmark::State& state) {
     }
 }
 BENCHMARK(BENCHMARK_gemm_parallel)
-	->Args({256, 2})
-	->Args({256, 4})
-	->Args({512, 4})
-	->Args({512, 8})
-	->Args({1024, 8})
-	->Args({1024, 16});
+	->Args({64, 2})->Args({64, 4})->Args({64, 8})->Args({64, 16})
+	->Args({128, 2})->Args({128, 4})->Args({128, 8})->Args({128, 16})
+	->Args({256, 2})->Args({256, 4})->Args({256, 8})->Args({256, 16})
+	->Args({512, 2})->Args({512, 4})->Args({512, 8})->Args({512, 16})
+	->Args({1024, 2})->Args({1024, 4})->Args({1024, 8})->Args({1024, 16});

@@ -350,7 +350,7 @@ TEST(Level1_dot_parallel, skips_dot_parallel_8_threads) {
 // test nrm2
 
 TEST(Level1_nrm2_parallel, basic_nrm2_parallel_2_threads) {
-	long n = 3;
+	long n = 2;
 	int nthreads = 2;
 	double y[2] = {std::sqrt(0.5), std::sqrt(0.5)};
 	int incy = 1;
@@ -359,7 +359,7 @@ TEST(Level1_nrm2_parallel, basic_nrm2_parallel_2_threads) {
 }
 
 TEST(Level1_nrm2_parallel, basic_nrm2_parallel_4_threads) {
-	long n = 3;
+	long n = 2;
 	int nthreads = 4;
 	double y[2] = {std::sqrt(0.5), std::sqrt(0.5)};
 	int incy = 1;

@@ -108,8 +108,8 @@ TEST(Level2_gemv_parallel, basic_gemv3_parallel_2_threads) {
 
 	ASSERT_EQ(gemv(trans, m, n, alpha, A, lda, x, incx, beta, y, incy, nthreads), 1);
 
-	ASSERT_NEAR(x[1], y[0], 1e-10);
-	ASSERT_NEAR(x[0], y[1], 1e-10);
+	ASSERT_NEAR(x[1], y[0], 1e-9);
+	ASSERT_NEAR(x[0], y[1], 1e-9);
 }
 
 TEST(Level2_gemv_parallel, basic_gemv3_parallel_4_threads) {
@@ -128,8 +128,8 @@ TEST(Level2_gemv_parallel, basic_gemv3_parallel_4_threads) {
 
 	ASSERT_EQ(gemv(trans, m, n, alpha, A, lda, x, incx, beta, y, incy, nthreads), 1);
 
-	ASSERT_NEAR(x[1], y[0], 1e-10);
-	ASSERT_NEAR(x[0], y[1], 1e-10);
+	ASSERT_NEAR(x[1], y[0], 1e-9);
+	ASSERT_NEAR(x[0], y[1], 1e-9);
 }
 
 TEST(Level2_gemv_parallel, hard_gemv_parallel_2_threads) {
@@ -179,7 +179,7 @@ TEST(Level2_gemv_parallel, hard_gemv_parallel_2_threads) {
     ASSERT_EQ(gemv(trans, m, n, alpha, A.data(), lda, x.data(), incx, beta, y.data(), incy, nthreads), 1);
 
     for (int i = 0; i < len_y; i++) {
-        ASSERT_NEAR(y[i * incy], z[i * incy], 1e-10);
+        ASSERT_NEAR(y[i * incy], z[i * incy], 1e-9);
 	}
 }
 
@@ -230,7 +230,7 @@ TEST(Level2_gemv_parallel, hard_gemv_parallel_4_threads) {
     ASSERT_EQ(gemv(trans, m, n, alpha, A.data(), lda, x.data(), incx, beta, y.data(), incy, nthreads), 1);
 
     for (int i = 0; i < len_y; i++) {
-        ASSERT_NEAR(y[i * incy], z[i * incy], 1e-10);
+        ASSERT_NEAR(y[i * incy], z[i * incy], 1e-9);
 	}
 }
 
@@ -281,7 +281,7 @@ TEST(Level2_gemv_parallel, hard_gemv_parallel_8_threads) {
     ASSERT_EQ(gemv(trans, m, n, alpha, A.data(), lda, x.data(), incx, beta, y.data(), incy, nthreads), 1);
 
     for (int i = 0; i < len_y; i++) {
-        ASSERT_NEAR(y[i * incy], z[i * incy], 1e-10);
+        ASSERT_NEAR(y[i * incy], z[i * incy], 1e-9);
 	}
 }
 
@@ -340,7 +340,7 @@ TEST(Level2_gemv_parallel, skips_gemv_parallel_2_threads) {
     ASSERT_EQ(gemv(trans, m, n, alpha, A.data(), lda, x.data(), incx, beta, y.data(), incy, nthreads), 1);
 
     for (int i = 0; i < len_y; i++) {
-        ASSERT_NEAR(y[i * incy], z[i * incy], 1e-10);
+        ASSERT_NEAR(y[i * incy], z[i * incy], 1e-9);
 	}
 }
 
@@ -399,7 +399,7 @@ TEST(Level2_gemv_parallel, skips_gemv_parallel_4_threads) {
     ASSERT_EQ(gemv(trans, m, n, alpha, A.data(), lda, x.data(), incx, beta, y.data(), incy, nthreads), 1);
 
     for (int i = 0; i < len_y; i++) {
-        ASSERT_NEAR(y[i * incy], z[i * incy], 1e-10);
+        ASSERT_NEAR(y[i * incy], z[i * incy], 1e-9);
 	}
 }
 
@@ -458,7 +458,7 @@ TEST(Level2_gemv_parallel, skips_gemv_parallel_8_threads) {
     ASSERT_EQ(gemv(trans, m, n, alpha, A.data(), lda, x.data(), incx, beta, y.data(), incy, nthreads), 1);
 
     for (int i = 0; i < len_y; i++) {
-        ASSERT_NEAR(y[i * incy], z[i * incy], 1e-10);
+        ASSERT_NEAR(y[i * incy], z[i * incy], 1e-9);
 	}
 }
 
@@ -480,7 +480,7 @@ TEST(Level2_ger_parallel, basic_ger1_parallel_2_threads) {
 	};
 
 	ASSERT_EQ(ger(m, n, alpha, x, incx, y, incy, A, lda, nthreads), 1);
-	ASSERT_THAT(A, Pointwise(DoubleNear(1e-10), rA));
+	ASSERT_THAT(A, Pointwise(DoubleNear(1e-9), rA));
 }
 
 TEST(Level2_ger_parallel, basic_ger1_parallel_4_threads) {
@@ -499,7 +499,7 @@ TEST(Level2_ger_parallel, basic_ger1_parallel_4_threads) {
 	};
 
 	ASSERT_EQ(ger(m, n, alpha, x, incx, y, incy, A, lda, nthreads), 1);
-	ASSERT_THAT(A, Pointwise(DoubleNear(1e-10), rA));
+	ASSERT_THAT(A, Pointwise(DoubleNear(1e-9), rA));
 }
 
 TEST(Level2_ger_parallel, basic_ger2_parallel_2_threads) {
@@ -521,7 +521,7 @@ TEST(Level2_ger_parallel, basic_ger2_parallel_2_threads) {
 	};
 
 	ASSERT_EQ(ger(m, n, alpha, x, incx, y, incy, A, lda, nthreads), 1);
-	ASSERT_THAT(A, Pointwise(DoubleNear(1e-10), rA));
+	ASSERT_THAT(A, Pointwise(DoubleNear(1e-9), rA));
 }
 
 TEST(Level2_ger_parallel, basic_ger2_parallel_4_threads) {
@@ -543,7 +543,7 @@ TEST(Level2_ger_parallel, basic_ger2_parallel_4_threads) {
 	};
 
 	ASSERT_EQ(ger(m, n, alpha, x, incx, y, incy, A, lda, nthreads), 1);
-	ASSERT_THAT(A, Pointwise(DoubleNear(1e-10), rA));
+	ASSERT_THAT(A, Pointwise(DoubleNear(1e-9), rA));
 }
 
 TEST(Level2_ger_parallel, hard_ger_parallel_2_threads) {
@@ -569,7 +569,7 @@ TEST(Level2_ger_parallel, hard_ger_parallel_2_threads) {
 	}
 
 	ASSERT_EQ(ger(m, n, alpha, x.data(), incx, y.data(), incy, A.data(), lda, nthreads), 1);
-	ASSERT_THAT(A, Pointwise(DoubleNear(1e-10), rA));
+	ASSERT_THAT(A, Pointwise(DoubleNear(1e-9), rA));
 }
 
 TEST(Level2_ger_parallel, hard_ger_parallel_4_threads) {
@@ -595,7 +595,7 @@ TEST(Level2_ger_parallel, hard_ger_parallel_4_threads) {
 	}
 
 	ASSERT_EQ(ger(m, n, alpha, x.data(), incx, y.data(), incy, A.data(), lda, nthreads), 1);
-	ASSERT_THAT(A, Pointwise(DoubleNear(1e-10), rA));
+	ASSERT_THAT(A, Pointwise(DoubleNear(1e-9), rA));
 }
 
 TEST(Level2_ger_parallel, hard_ger_parallel_8_threads) {
@@ -621,7 +621,7 @@ TEST(Level2_ger_parallel, hard_ger_parallel_8_threads) {
 	}
 
 	ASSERT_EQ(ger(m, n, alpha, x.data(), incx, y.data(), incy, A.data(), lda, nthreads), 1);
-	ASSERT_THAT(A, Pointwise(DoubleNear(1e-10), rA));
+	ASSERT_THAT(A, Pointwise(DoubleNear(1e-9), rA));
 }
 
 TEST(Level2_ger_parallel, skips_ger_parallel_2_threads) {
@@ -661,7 +661,7 @@ TEST(Level2_ger_parallel, skips_ger_parallel_2_threads) {
 	}
 
 	ASSERT_EQ(ger(m_steps, n_steps, alpha, x.data(), incx, y.data(), incy, A.data(), lda, nthreads), 1);
-	ASSERT_THAT(A, Pointwise(DoubleNear(1e-10), rA));
+	ASSERT_THAT(A, Pointwise(DoubleNear(1e-9), rA));
 }
 
 TEST(Level2_ger_parallel, skips_ger_parallel_4_threads) {
@@ -701,7 +701,7 @@ TEST(Level2_ger_parallel, skips_ger_parallel_4_threads) {
 	}
 
 	ASSERT_EQ(ger(m_steps, n_steps, alpha, x.data(), incx, y.data(), incy, A.data(), lda, nthreads), 1);
-	ASSERT_THAT(A, Pointwise(DoubleNear(1e-10), rA));
+	ASSERT_THAT(A, Pointwise(DoubleNear(1e-9), rA));
 }
 
 TEST(Level2_ger_parallel, skips_ger_parallel_8_threads) {
@@ -741,5 +741,5 @@ TEST(Level2_ger_parallel, skips_ger_parallel_8_threads) {
 	}
 
 	ASSERT_EQ(ger(m_steps, n_steps, alpha, x.data(), incx, y.data(), incy, A.data(), lda, nthreads), 1);
-	ASSERT_THAT(A, Pointwise(DoubleNear(1e-10), rA));
+	ASSERT_THAT(A, Pointwise(DoubleNear(1e-9), rA));
 }

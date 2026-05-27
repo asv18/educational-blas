@@ -148,7 +148,7 @@ TEST(Level1_dot_baseline, skips_dot_baseline) {
 // test nrm2
 
 TEST(Level1_nrm2_baseline, basic_nrm2_baseline) {
-	long n = 3;
+	long n = 2;
 	double y[2] = {std::sqrt(0.5), std::sqrt(0.5)};
 	int incy = 1;
 
