@@ -21,7 +21,7 @@
 
 CXX := /opt/homebrew/opt/llvm/bin/clang++
 
-CXXFLAGS := -std=c++17 -Wall -Wextra -O2 -fopenmp
+CXXFLAGS := -std=c++17 -Wall -Wextra -O3 -march=native -fopenmp
 CXXFLAGS += -isysroot $(shell xcrun --show-sdk-path)
 
 CPPFLAGS := -Iinclude \

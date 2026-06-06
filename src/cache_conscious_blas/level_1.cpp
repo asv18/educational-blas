@@ -1,16 +1,25 @@
 #include "cache_conscious_blas.hpp"
 
-// Since these are all linear O(n) operations, not much we can do outside of warming up the cache with prefetching
+// Since these are all linear O(n) operations, not much we can do outside of
+// warming up the cache with prefetching and SIMD optimizations?
 // Interesting thing to note - could there potentially be further speed ups
 // if we used different step sizes? Something to explore later
 
 namespace ccblas {
 	int axpy(long n, double alpha, const double* x, int incx, double* y, int incy, int prefetch_amount_x, int prefetch_amount_y) {
-		__builtin_prefetch(x + prefetch_amount_x * sizeof(double));
-		__builtin_prefetch(y + prefetch_amount_y * sizeof(double));
-
-		for (long i = 0; i < n; i++) {
-			y[i * incy] += alpha * x[i * incx];
+		if (incx == 1 && incy == 1) {
+			#pragma omp simd
+			for (long i = 0; i < n; i++) {
+				__builtin_prefetch(x + (i + prefetch_amount_x) * incx, 0, 1);
+				__builtin_prefetch(y + (i + prefetch_amount_y) * incy, 1, 1);
+				y[i] += alpha * x[i];
+			}
+		} else {
+			for (long i = 0; i < n; i++) {
+				__builtin_prefetch(x + (i + prefetch_amount_x) * incx, 0, 1);
+				__builtin_prefetch(y + (i + prefetch_amount_y) * incy, 1, 1);
+				y[i * incy] += alpha * x[i * incx];
+			}
 		}
 
 		return 1;

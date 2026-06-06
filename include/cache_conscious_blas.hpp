@@ -2,6 +2,7 @@
 
 #include <cmath>
 #include <cfloat>
+#include <vector>
 #include <omp.h>
 
 namespace ccblas {

@@ -20,6 +20,12 @@ namespace ccblas {
 			return 0;
 		}
 
+		__builtin_prefetch(x + prefetch_amount_x);
+		__builtin_prefetch(y + prefetch_amount_y);
+		__builtin_prefetch(A + prefetch_amount_A);
+
+		// A is row major
+
 		for (int row = 0; row < rows; row++) {
 			double sum = 0.0;
 			for (int col = 0; col < cols; col++) {
